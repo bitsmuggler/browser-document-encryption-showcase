@@ -77,8 +77,8 @@ sequenceDiagram
     participant WebCrypto
     participant FileAPI
 
-    User->>UI: Upload encrypted file
     User->>UI: Enter password, IV, and salt
+    User->>UI: Upload encrypted file
     UI->>FileAPI: Read file as ArrayBuffer
     FileAPI-->>UI: Returns Encrypted ArrayBuffer
     UI->>WebCrypto: Derive key using PBKDF2(password, salt)
