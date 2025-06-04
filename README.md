@@ -2,7 +2,7 @@
 
 This showcase demonstrates how to securely encrypt and decrypt PDF files in the browser - without sending data to a server.
 
-Try it out at [https://browser-document-encryption-showcas.vercel.app/](https://browser-document-encryption-showcas.vercel.app/)!
+Try it out [here](https://browser-document-encryption-showcas.vercel.app)!
 
 ## 🚀 Features
 
