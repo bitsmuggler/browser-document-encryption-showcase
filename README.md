@@ -53,17 +53,19 @@ sequenceDiagram
     participant User
     participant UI
     participant WebCrypto
+    participant FileAPI
 
-    User->>UI: Select PDF File
-    UI->>UI: Read file with FileReader → ArrayBuffer
-    UI->>WebCrypto: generateSalt() → Uint8Array(16)
-    UI->>WebCrypto: importKey(\"raw\", TextEncoder().encode(password), \"PBKDF2\", ...)
-    WebCrypto-->>UI: KeyMaterial
-    UI->>WebCrypto: deriveKey({ name: \"PBKDF2\", salt, ... }, KeyMaterial, { name: \"AES-GCM\" }, ...)
-    WebCrypto-->>UI: AESKey
-    UI->>WebCrypto: encrypt({ name: \"AES-GCM\", iv }, AESKey, ArrayBuffer)
-    WebCrypto-->>UI: Encrypted Buffer
-    UI->>User: Download encrypted file
+    User->>UI: Selects PDF File
+    UI->>FileAPI: Read file as ArrayBuffer
+    FileAPI-->>UI: Returns ArrayBuffer
+    UI->>WebCrypto: Generate random salt
+    UI->>WebCrypto: Derive key using PBKDF2(password, salt)
+    UI->>WebCrypto: Generate random IV
+    UI->>WebCrypto: Encrypt(ArrayBuffer, key, IV)
+    WebCrypto-->>UI: Encrypted data
+    UI->>UI: Store IV + Salt
+    UI->>QR: Generate QR code (IV + Salt)
+    UI->>User: Download Encrypted File
 ```
 
 ### Decryption Flow
@@ -73,17 +75,16 @@ sequenceDiagram
     participant User
     participant UI
     participant WebCrypto
+    participant FileAPI
 
     User->>UI: Upload encrypted file
-    User->>UI: Enter password, salt, IV
-    UI->>UI: Read file → ArrayBuffer
-    UI->>WebCrypto: importKey(\"raw\", TextEncoder().encode(password), \"PBKDF2\", ...)
-    WebCrypto-->>UI: KeyMaterial
-    UI->>WebCrypto: deriveKey({ name: \"PBKDF2\", salt, ... }, KeyMaterial, { name: \"AES-GCM\" }, ...)
-    WebCrypto-->>UI: AESKey
-    UI->>WebCrypto: decrypt({ name: \"AES-GCM\", iv }, AESKey, Encrypted Buffer)
-    WebCrypto-->>UI: Plaintext Buffer
-    UI->>User: Download decrypted PDF
+    User->>UI: Enter password, IV, and salt
+    UI->>FileAPI: Read file as ArrayBuffer
+    FileAPI-->>UI: Returns Encrypted ArrayBuffer
+    UI->>WebCrypto: Derive key using PBKDF2(password, salt)
+    UI->>WebCrypto: Decrypt(ArrayBuffer, key, IV)
+    WebCrypto-->>UI: Decrypted data
+    UI->>User: Download Decrypted PDF
 ```
 
 ## 🛠️ Getting Started
