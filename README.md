@@ -1,6 +1,6 @@
 # 🔐 Local PDF Encryption with React
 
-This showcase demonstrates how to **securely encrypt and decrypt PDF files in the browser** - with no data ever sent to a server.
+This showcase demonstrates how to securely encrypt and decrypt PDF files in the browser - without sending data to a server.
 
 ## 🚀 Features
 
