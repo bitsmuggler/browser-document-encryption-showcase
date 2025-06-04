@@ -42,11 +42,11 @@ After encryption, the app generates a QR code containing the Base64-encoded Salt
 
 ⚠️ **Note:** The password is **not included** in the QR code. Only use it to transfer Salt & IV between devices.
 
----
+---Process
 
-## Encryption Process
+## 🔐 Understanding Browser Encryption & Decryption 
 
-### 🔐 Encryption Flow
+### Encryption Flow
 
 ```mermaid
 sequenceDiagram
