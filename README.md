@@ -44,6 +44,48 @@ After encryption, the app generates a QR code containing the Base64-encoded Salt
 
 ---
 
+## Encryption Process
+
+### 🔐 Encryption Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI
+    participant WebCrypto
+
+    User->>UI: Select PDF File
+    UI->>UI: Read file with FileReader → ArrayBuffer
+    UI->>WebCrypto: generateSalt() → Uint8Array(16)
+    UI->>WebCrypto: importKey(\"raw\", TextEncoder().encode(password), \"PBKDF2\", ...)
+    WebCrypto-->>UI: KeyMaterial
+    UI->>WebCrypto: deriveKey({ name: \"PBKDF2\", salt, ... }, KeyMaterial, { name: \"AES-GCM\" }, ...)
+    WebCrypto-->>UI: AESKey
+    UI->>WebCrypto: encrypt({ name: \"AES-GCM\", iv }, AESKey, ArrayBuffer)
+    WebCrypto-->>UI: Encrypted Buffer
+    UI->>User: Download encrypted file
+```
+
+### Decryption Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI
+    participant WebCrypto
+
+    User->>UI: Upload encrypted file
+    User->>UI: Enter password, salt, IV
+    UI->>UI: Read file → ArrayBuffer
+    UI->>WebCrypto: importKey(\"raw\", TextEncoder().encode(password), \"PBKDF2\", ...)
+    WebCrypto-->>UI: KeyMaterial
+    UI->>WebCrypto: deriveKey({ name: \"PBKDF2\", salt, ... }, KeyMaterial, { name: \"AES-GCM\" }, ...)
+    WebCrypto-->>UI: AESKey
+    UI->>WebCrypto: decrypt({ name: \"AES-GCM\", iv }, AESKey, Encrypted Buffer)
+    WebCrypto-->>UI: Plaintext Buffer
+    UI->>User: Download decrypted PDF
+```
+
 ## 🛠️ Getting Started
 
 ```bash
