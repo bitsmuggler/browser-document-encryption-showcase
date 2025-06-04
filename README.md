@@ -1,4 +1,4 @@
-# 🔐 Local PDF Encryption with React
+# 🔐 Browser Document Encryption Showcase
 
 This showcase demonstrates how to securely encrypt and decrypt PDF files in the browser - without sending data to a server.
 
