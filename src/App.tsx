@@ -36,8 +36,7 @@ function App() {
     };
 
     const handleDecrypt = async (file: File) => {
-
-        if (!saltInput || !ivInput) return alert('Bitte Salt und IV eingeben');
+        if (!saltInput || !ivInput) return alert('Please enter Salt and IV');
         const encryptedBuffer = await file.arrayBuffer();
         const key = await generateKeyFromPassword(password, base64ToBuffer(saltInput));
         try {
@@ -45,7 +44,7 @@ function App() {
             setDownloadUrl(URL.createObjectURL(new Blob([decrypted])));
             setFileName(`decrypted-${file.name}`);
         } catch {
-            alert('Entschlüsselung fehlgeschlagen. Passwort korrekt?');
+            alert('Decryption failed. Is the password correct?');
         }
     };
 
@@ -54,13 +53,13 @@ function App() {
     return (
         <div className="min-h-screen p-8">
             <div className="max-w-xl mx-auto space-y-6">
-                <h1 className="text-3xl font-bold text-center">🔐 Lokale PDF-Verschlüsselung</h1>
+                <h1 className="text-3xl font-bold text-center">🔐 Local PDF Encryption</h1>
 
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium">🔑 Passwort</label>
+                    <label className="block text-sm font-medium">🔑 Password</label>
                     <input
                         type="password"
-                        placeholder="Passwort für Verschlüsselung"
+                        placeholder="Password for encryption"
                         className="w-full px-4 py-2 text-black rounded shadow"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -94,7 +93,7 @@ function App() {
                         onClick={() => encryptInputRef.current?.click()}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded shadow"
                     >
-                        📤 Datei verschlüsseln (Upload)
+                        📤 Encrypt File (Upload)
                     </button>
                     <input
                         ref={encryptInputRef}
@@ -110,7 +109,7 @@ function App() {
                         onClick={() => decryptInputRef.current?.click()}
                         className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded shadow"
                     >
-                        📥 Datei entschlüsseln (Upload)
+                        📥 Decrypt File (Upload)
                     </button>
                     <input
                         ref={decryptInputRef}
@@ -127,7 +126,7 @@ function App() {
                             download={fileName}
                             className="inline-block bg-green-600 hover:bg-green-700 transition px-6 py-2 rounded text-white font-semibold mt-4"
                         >
-                            ⬇️ {fileName} herunterladen
+                            ⬇️ Download {fileName}
                         </a>
                     </div>
                 )}
